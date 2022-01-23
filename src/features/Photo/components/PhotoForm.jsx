@@ -5,7 +5,7 @@ import SelectField from "custom-fields/SelectField";
 import { FastField, Form, Formik } from "formik";
 import PropTypes from "prop-types";
 import React from "react";
-import { Button, FormGroup } from "reactstrap";
+import { Button, FormGroup, Spinner } from "reactstrap";
 import * as Yup from "yup";
 
 PhotoForm.propTypes = {
@@ -40,30 +40,40 @@ function PhotoForm(props) {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(value) => console.log(value)}
+      onSubmit={props.onSubmit}
     >
-      <Form>
-        <FastField
-          name="title"
-          component={InputField}
-          label="Title"
-          placeholder="Eg: Wow nature ..."
-        />
-        <FastField
-          name="categoryId"
-          component={SelectField}
-          label="Category"
-          placeholder="What's your photo category?"
-          options={PHOTO_CATEGORY_OPTIONS}
-        />
-        <FastField name="photo" component={RandomPhotoField} label="Photo" />
+      {(formikProps) => {
+        const { values, errors, touched, isSubmitting } = formikProps;
+        console.log({ values, errors, touched });
+        return (
+          <Form>
+            <FastField
+              name="title"
+              component={InputField}
+              label="Title"
+              placeholder="Eg: Wow nature ..."
+            />
+            <FastField
+              name="categoryId"
+              component={SelectField}
+              label="Category"
+              placeholder="What's your photo category?"
+              options={PHOTO_CATEGORY_OPTIONS}
+            />
+            <FastField
+              name="photo"
+              component={RandomPhotoField}
+              label="Photo"
+            />
 
-        <FormGroup>
-          <Button type="submit" color="primary">
-            Add to album
-          </Button>
-        </FormGroup>
-      </Form>
+            <FormGroup>
+              <Button type="submit" color="primary">
+                {isSubmitting ? <Spinner size="sm" /> : "Submit"}
+              </Button>
+            </FormGroup>
+          </Form>
+        );
+      }}
     </Formik>
   );
 }
