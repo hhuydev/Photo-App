@@ -3,7 +3,6 @@ import SignIn from "features/Auth/pages/SignIn";
 import firebase from "firebase";
 import React, { Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
-import { Button } from "reactstrap";
 import "./App.scss";
 import Header from "./components/Header";
 import NotFound from "./components/NotFound/index";
@@ -50,6 +49,9 @@ function App() {
 
         const token = await user.getIdToken();
         console.log("Logged in user token: ", token);
+        const setjson = JSON.stringify(user.providerData);
+
+        localStorage.setItem("firebaseui::rememberedAccounts", setjson);
       });
 
     return () => unregisterAuthObserver();
